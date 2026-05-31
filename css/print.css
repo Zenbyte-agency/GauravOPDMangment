@@ -1,0 +1,441 @@
+/* ============================================
+   PRINT STYLESHEET – OPD Prescription & Bill
+   ============================================ */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  body {
+    font-family: 'Times New Roman', serif;
+    font-size: 13pt;
+    color: #000;
+    background: #fff;
+  }
+
+  .no-print,
+  .sidebar,
+  .topbar,
+  .status-bar,
+  .modal-overlay,
+  .toast-container,
+  nav,
+  button:not(.print-keep),
+  .btn { display: none !important; }
+
+  .print-area {
+    display: block !important;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ---- PRESCRIPTION PAPER ---- */
+  .rx-print-page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 0;
+    page-break-after: avoid;
+    page-break-before: avoid;
+    page-break-inside: avoid;
+    position: relative;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  /* Header band */
+  .rx-header {
+    background: linear-gradient(135deg, #1a4fa0 0%, #2d6cdf 100%) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff !important;
+    padding: 10px 20px 8px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 3px solid #00c896;
+  }
+
+  .rx-header-left h1 {
+    font-size: 20pt;
+    font-weight: 700;
+    font-family: 'Times New Roman', serif;
+    color: #fff !important;
+    letter-spacing: 0.5px;
+  }
+  .rx-header-left .rx-qualification {
+    font-size: 9pt;
+    color: rgba(255,255,255,0.88) !important;
+    margin-top: 2px;
+  }
+  .rx-header-left .rx-reg {
+    font-size: 8.5pt;
+    color: rgba(255,255,255,0.75) !important;
+    margin-top: 2px;
+  }
+  .rx-header-left .rx-speciality {
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #b3e5fc !important;
+    margin-top: 4px;
+  }
+
+  .rx-header-right {
+    text-align: right;
+  }
+  .rx-header-right p {
+    font-size: 9pt;
+    color: rgba(255,255,255,0.9) !important;
+    line-height: 1.6;
+  }
+  .rx-header-right p i { margin-right: 4px; }
+  .rx-header-right .rx-clinic-name {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #fff !important;
+    margin-bottom: 4px;
+  }
+
+  /* Green strip below header */
+  .rx-accent-strip {
+    background: #00c896 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    height: 4px;
+  }
+
+  /* Patient info band */
+  .rx-patient-band {
+    background: #f0f4fc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 8px 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-bottom: 1px solid #ccc;
+  }
+  .rx-patient-field {
+    display: flex; align-items: baseline; gap: 5px;
+    font-size: 11.5pt;
+  }
+  .rx-patient-field label {
+    font-weight: 700;
+    color: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .rx-patient-field span {
+    border-bottom: 1px solid #999;
+    min-width: 80px;
+    display: inline-block;
+    padding-bottom: 1px;
+  }
+
+  /* Rx body */
+  .rx-body {
+    display: flex;
+    min-height: 170mm;
+    padding: 6px 20px;
+    gap: 12px;
+  }
+
+  /* Left column */
+  .rx-left-col { flex: 1; min-width: 0; }
+
+  .rx-section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1.5px solid #1a4fa0;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+    margin-top: 6px;
+  }
+
+  .rx-items-list {
+    list-style: none;
+    margin: 0 0 6px 0;
+    padding: 0;
+  }
+  .rx-items-list li {
+    font-size: 12pt;
+    padding: 1px 0 1px 10px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .rx-items-list li::before {
+    content: '•';
+    position: absolute; left: 0;
+    color: #1a4fa0;
+  }
+
+  /* Rx symbol */
+  .rx-symbol {
+    font-size: 36pt;
+    font-weight: 700;
+    color: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* Medicine table */
+  .rx-med-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5pt;
+    margin-top: 3px;
+  }
+  .rx-med-table th {
+    background: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff !important;
+    padding: 3px 6px;
+    text-align: left;
+    font-size: 10.5pt;
+  }
+  .rx-med-table td {
+    padding: 3px 6px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+  }
+  .rx-med-table tr:nth-child(even) td {
+    background: #f0f4fc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .rx-med-sno { width: 28px; text-align: center; }
+  .rx-med-name { font-weight: 600; }
+  .rx-med-route {
+    font-size: 8pt;
+    color: #555;
+    display: block;
+  }
+
+  /* Advice */
+  .rx-advice {
+    font-size: 11.5pt;
+    line-height: 1.5;
+    padding: 4px 8px;
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    margin-top: 3px;
+  }
+
+  /* Right column (divider) */
+  .rx-divider {
+    width: 1px;
+    background: #ccc;
+    margin: 10px 0;
+  }
+
+  /* Vitals / Notes column */
+  .rx-right-col { width: 70mm; flex-shrink: 0; }
+  .rx-vitals-box {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px;
+    font-size: 11pt;
+    margin-top: 6px;
+  }
+  .rx-vital-row {
+    display: flex; justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 3px 0;
+  }
+  .rx-vital-row:last-child { border-bottom: none; }
+  .rx-vital-row label { font-weight: 600; color: #1a4fa0; }
+
+  /* Footer */
+  .rx-footer {
+    border-top: 2px solid #1a4fa0;
+    padding: 6px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+  }
+  .rx-footer-next { font-size: 10.5pt; color: #444; }
+  .rx-footer-sign { text-align: right; }
+  .rx-footer-sign .sign-line {
+    border-top: 1px solid #000;
+    min-width: 100px;
+    margin-top: 24px;
+    font-size: 10.5pt;
+    text-align: center;
+  }
+
+  /* ---- BILL PRINT ---- */
+  .bill-print-page {
+    width: 210mm;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .bill-header {
+    background: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff !important;
+    text-align: center;
+    padding: 14px;
+  }
+  .bill-header h1 { font-size: 18pt; font-weight: 700; color: #fff !important; }
+  .bill-header p  { font-size: 9pt; color: rgba(255,255,255,0.85) !important; }
+
+  .bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin: 10px 0;
+  }
+  .bill-table th {
+    background: #1a4fa0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff !important;
+    padding: 7px 10px;
+  }
+  .bill-table td { padding: 6px 10px; border-bottom: 1px solid #ddd; }
+  .bill-table .bill-total-row td {
+    font-weight: 700; font-size: 11pt;
+    border-top: 2px solid #1a4fa0;
+    background: #edf2ff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  /* ---- MEDICAL CERTIFICATE PRINT ---- */
+  .cert-print {
+    width: 100% !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 8mm 12mm !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-family: 'Times New Roman', serif !important;
+    font-size: 13pt !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 297mm !important;
+    page-break-after: always !important;
+  }
+  .cert-print-header-spacer {
+    height: 6cm !important;
+  }
+  .cert-print-title-band {
+    text-align: center !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 2px solid #000 !important;
+  }
+  .cert-print-title-band h2 {
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    letter-spacing: 4px !important;
+    text-transform: uppercase !important;
+    margin: 0 0 6px !important;
+    text-decoration: underline !important;
+    text-underline-offset: 6px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .cert-ref-line {
+    font-size: 10pt !important;
+    color: #333 !important;
+  }
+  .cert-print-body {
+    padding: 8px 0 !important;
+    min-height: 200px !important;
+  }
+  .cert-body-to {
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+    margin-bottom: 18px !important;
+    color: #000 !important;
+    text-decoration: underline !important;
+    text-align: center !important;
+  }
+  .cert-body-text {
+    font-size: 14pt !important;
+    line-height: 2.2 !important;
+    text-align: justify !important;
+    margin-bottom: 10px !important;
+    color: #000 !important;
+  }
+  .cert-body-text strong {
+    color: #000 !important;
+    font-weight: 700 !important;
+  }
+  .cert-print-body {
+    padding: 8px 0 !important;
+    min-height: 200px !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .cert-print-footer {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    margin-top: auto !important;
+    padding-top: 12px !important;
+  }
+  .cert-footer-left p {
+    font-size: 11pt !important;
+    color: #000 !important;
+    margin: 4px 0 !important;
+  }
+  .cert-sign-line {
+    border-top: 1px solid #000 !important;
+    width: 180px !important;
+    margin: 0 auto 6px !important;
+    margin-top: 36px !important;
+  }
+  .cert-doc-name {
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  .cert-sign-area p {
+    font-size: 10pt !important;
+    color: #000 !important;
+    margin: 2px 0 !important;
+  }
+  .cert-print-seal {
+    text-align: right !important;
+    margin-top: 16px !important;
+    font-size: 10pt !important;
+    color: #333 !important;
+    font-style: italic !important;
+  }
+}

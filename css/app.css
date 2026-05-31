@@ -1,0 +1,748 @@
+/* ===== APP-SPECIFIC STYLES ===== */
+
+.page-section { display:none; animation: fadeInPage 0.3s ease; }
+.page-section.active { display:block; }
+@keyframes fadeInPage { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+/* Top bar financial year */
+.topbar-fy {
+  background: linear-gradient(135deg,#00c896,#00a87e);
+  color:#fff; padding:5px 14px; border-radius:50px;
+  font-size:0.78rem; font-weight:600; white-space:nowrap;
+}
+
+/* Bill item rows */
+.bill-item-row {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  background:#f7faff; border:1px solid var(--border);
+  border-radius:8px; padding:10px 12px; margin-bottom:8px;
+  transition: border-color 0.2s;
+}
+.bill-item-row:hover { border-color:var(--primary); }
+.bill-col-name { flex:2; min-width:160px; }
+.bill-col-amt  { flex:1; min-width:100px; }
+.bill-col-rm   { flex:0 0 36px; }
+
+/* ===== PRINT PRESCRIPTION STYLES ===== */
+@media print {
+  body * { visibility:hidden; }
+  #printArea, #printArea * { visibility:visible; }
+  #printArea {
+    display:block !important;
+    position:absolute; left:0; top:0; 
+    width:210mm; height:297mm;
+    margin:0; padding:0;
+    background:#fff; color:#000;
+    font-family:'Times New Roman',serif; font-size:13px;
+    overflow:hidden;
+  }
+}
+
+.rx-print { 
+  width:210mm; 
+  max-height:297mm; 
+  margin:0 auto; 
+  padding:0; 
+  background:#fff; 
+  color:#000;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Header spacer for A4 top margin (0-5cm reserved for header) */
+.rx-print-header-spacer {
+  flex-shrink:0;
+  height:5.5cm;
+}
+
+/* Main content area */
+.rx-print-content {
+  padding:0.3cm 0.8cm;
+  font-size:13px;
+  line-height:1.35;
+}
+
+/* Footer area - flows below medicine table */
+.rx-print-footer {
+  border-top:2px solid #1a4fa0; 
+  padding:0.3cm 0;
+  margin-top:0.4cm;
+  display:flex; 
+  justify-content:space-between; 
+  align-items:flex-end;
+}
+
+.rx-print-header {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  border-bottom:3px double #1a4fa0; padding-bottom:12px; margin-bottom:14px;
+}
+.rx-print-header-left h1 { font-size:18px; color:#1a4fa0; margin:0; font-family:'Poppins',sans-serif; }
+.rx-print-header-left p { margin:2px 0; font-size:11px; color:#444; }
+.rx-print-header-left .qual { font-size:12px; color:#333; font-weight:600; }
+.rx-print-header-right { text-align:right; }
+.rx-print-header-right p { margin:2px 0; font-size:11px; color:#444; }
+.rx-print-header-right .clinic-name { font-size:14px; font-weight:700; color:#1a4fa0; }
+
+.rx-print-patient {
+  display:flex; flex-wrap:wrap; gap:6px 20px;
+  background:#f0f4fc; padding:6px 10px; border-radius:6px;
+  margin-bottom:8px; font-size:14px;
+}
+.rx-print-patient span { font-weight:600; color:#1a4fa0; }
+
+.rx-print-vitals { display:flex; gap:14px; margin-bottom:6px; font-size:13px; }
+.rx-print-vitals strong { color:#1a4fa0; }
+
+.rx-print-exam-horizontal { margin-bottom:6px; }
+.rx-print-exam-horizontal h4 { font-size:14px; color:#1a4fa0; margin:0 0 3px; border-bottom:1px solid #dde3f0; padding-bottom:2px; }
+.rx-exam-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; font-size:13px; }
+.rx-exam-item { display:flex; gap:4px; }
+.rx-exam-label { font-weight:600; color:#1a4fa0; min-width:45px; }
+.rx-exam-value { word-break:break-word; }
+
+.rx-print-section { margin-bottom:6px; }
+.rx-print-section h4 { font-size:14px; color:#1a4fa0; margin:0 0 3px; border-bottom:1px solid #dde3f0; padding-bottom:2px; }
+.rx-print-section p { margin:1px 0; font-size:14px; }
+
+.rx-print-inline-section { margin-bottom: 4px; font-size: 14px; line-height: 1.35; }
+.rx-print-inline-section strong { color: #1a4fa0; font-weight: 700; margin-right: 4px; }
+.rx-print-inline-section span { color: #000; }
+
+.rx-print-rx-symbol { font-size:24px; font-weight:700; color:#1a4fa0; font-family:serif; margin:4px 0 4px; }
+
+.rx-print-med-table { width:100%; border-collapse:collapse; margin-bottom:8px; font-size:14px; }
+.rx-print-med-table th {
+  background:#1a4fa0; color:#fff; padding:4px 8px;
+  text-align:left; font-weight:700; font-size:14px;
+}
+.rx-print-med-table td { padding:3px 8px; border-bottom:1px solid #ddd; font-weight:700; }
+.rx-print-med-table tr:nth-child(even) td { background:#f7faff; }
+
+.rx-print-advice { background:#fffde7; border-left:3px solid #ffc107; padding:6px 10px; font-size:13px; margin-bottom:8px; border-radius:4px; }
+
+.rx-print-footer {
+  border-top:2px solid #1a4fa0; 
+  padding:0.3cm 0;
+  margin-top:0.4cm;
+  display:flex; 
+  justify-content:space-between; 
+  align-items:flex-end;
+}
+.rx-footer-left {
+  text-align:left; flex:1;
+}
+.rx-footer-right {
+  text-align:right; flex:1;
+}
+.rx-footer-label { font-size:12px; color:#333; margin-top:3px; }
+.rx-advice-compact { font-size:12px; color:#333; line-height:1.35; margin-bottom:3px; }
+.rx-print-footer .sign { text-align:right; }
+.rx-print-footer .sign p { margin:0; font-size:11px; color:#333; line-height:1.2; }
+.rx-print-footer .sign .doc-name { font-size:14px; font-weight:700; color:#1a4fa0; }
+
+/* Bill print */
+.bill-print { width:100%; max-width:210mm; margin:0 auto; padding:10mm; background:#fff; color:#000; }
+.bill-print-header { text-align:center; border-bottom:2px solid #1a4fa0; padding-bottom:10px; margin-bottom:14px; }
+.bill-print-header h2 { color:#1a4fa0; margin:0; }
+.bill-print-header p { font-size:11px; color:#555; margin:2px 0; }
+.bill-print-table { width:100%; border-collapse:collapse; margin:10px 0; }
+.bill-print-table th { background:#1a4fa0; color:#fff; padding:8px; text-align:left; }
+.bill-print-table td { padding:7px 8px; border-bottom:1px solid #ddd; }
+.bill-print-total { text-align:right; font-size:16px; font-weight:700; color:#1a4fa0; margin-top:10px; }
+
+/* View Rx modal content */
+#viewRxContent .rx-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; margin-bottom:14px; font-size:0.88rem; }
+#viewRxContent .rx-detail-grid dt { font-weight:600; color:var(--primary); }
+#viewRxContent .rx-detail-grid dd { margin:0; }
+
+/* Rx Medicine Header Row */
+.rx-med-header-row {
+  display:flex; gap:8px; padding:8px 12px;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+  color:#fff; border-radius:8px 8px 0 0;
+  font-size:0.82rem; font-weight:600;
+}
+.rx-hcol-name { flex:2; min-width:160px; }
+.rx-hcol-sm { flex:1; min-width:90px; }
+.rx-hcol-btn { flex:0 0 36px; }
+
+/* Enhanced medicine row for prescription */
+.medicine-row {
+  display:flex; flex-wrap:wrap; gap:8px;
+  align-items:center;
+  background:#f7faff;
+  border:1px solid var(--border);
+  border-top:none;
+  border-radius:0;
+  padding:8px 12px;
+  margin-bottom:0;
+  transition:border-color 0.2s;
+}
+.medicine-row:last-child { border-radius:0 0 8px 8px; }
+.medicine-row:hover { background:#edf2ff; }
+
+/* Bill totals grid */
+.bill-totals-grid {
+  margin-top:16px;
+  border-top:2px solid var(--border);
+  padding-top:12px;
+}
+.bill-totals-grid .form-row { margin-bottom:6px; }
+.bill-totals-grid .form-label { font-size:0.82rem; text-align:right; }
+
+/* Bill item row enhanced with NT column */
+.bill-item-row {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  background:#f7faff; border:1px solid var(--border);
+  border-radius:8px; padding:10px 12px; margin-bottom:8px;
+  transition: border-color 0.2s;
+}
+.bill-item-row:hover { border-color:var(--primary); }
+.bill-col-name { flex:2; min-width:160px; }
+.bill-col-charges { flex:1; min-width:80px; }
+.bill-col-nt { flex:0 0 60px; }
+.bill-col-amt { flex:1; min-width:100px; }
+.bill-col-rm { flex:0 0 36px; }
+
+/* ===== DRUG ALLERGY BANNER (Prescription Form) ===== */
+.drug-allergy-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  border: 2px solid var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  margin: 12px 0 4px;
+  color: #9b1c1c;
+  font-size: 0.92rem;
+  font-weight: 600;
+  animation: allergyPulse 2s ease-in-out infinite;
+}
+.drug-allergy-banner i {
+  font-size: 1.4rem;
+  color: var(--danger);
+  flex-shrink: 0;
+}
+@keyframes allergyPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229,62,62,0.25); }
+  50%      { box-shadow: 0 0 0 6px rgba(229,62,62,0); }
+}
+
+/* ===== DRUG ALLERGY ON PRINT ===== */
+.rx-print-allergy {
+  background: #fff5f5;
+  border: 2px solid #e53e3e;
+  border-radius: 4px;
+  padding: 4px 10px;
+  margin-bottom: 6px;
+  color: #9b1c1c;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ===== HORIZONTAL EXAMINATION ON PRINT ===== */
+.rx-print-exam-horizontal {
+  margin-bottom: 6px;
+}
+.rx-print-exam-horizontal h4 {
+  font-size: 14px;
+  color: #1a4fa0;
+  margin: 0 0 4px;
+  border-bottom: 1px solid #dde3f0;
+  padding-bottom: 2px;
+}
+.rx-exam-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.rx-exam-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 13px;
+  padding: 2px 8px;
+  background: #f0f4fc;
+  border-radius: 4px;
+  border: 1px solid #dde3f0;
+}
+.rx-exam-label {
+  font-weight: 700;
+  color: #1a4fa0;
+  white-space: nowrap;
+}
+.rx-exam-value {
+  color: #222;
+}
+
+/* ===== STYLED ADVICE / INSTRUCTIONS ON PRINT ===== */
+.rx-print-advice-styled {
+  border: none;
+  margin: 6px 0 8px;
+  padding: 0;
+  font-size: 13px;
+}
+.rx-advice-title {
+  color: #1a4fa0;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 0 4px;
+  border-bottom: 1px solid #dde3f0;
+  margin-bottom: 4px;
+}
+.rx-advice-body {
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+}
+.rx-advice-followup {
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a4fa0;
+}
+.rx-advice-important {
+  padding: 4px 10px;
+}
+.rx-advice-emergency {
+  padding: 4px 10px;
+}
+.rx-advice-warn {
+  font-weight: 700;
+  color: #c53030;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.rx-advice-rule {
+  font-size: 12.5px;
+  color: #333;
+  padding-left: 8px;
+  line-height: 1.5;
+}
+
+/* ===== COMPRESSED ADVICE IN FOOTER ===== */
+.rx-advice-compact {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #333;
+  margin-bottom: 4px;
+  padding: 0;
+}
+.rx-footer-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* ===== ADVICE EMOJI / COLOR TOOLBAR (Form UI) ===== */
+.rx-advice-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  background: linear-gradient(135deg, #f8faff 0%, #eef2fb 100%);
+  border: 1px solid #d0daf5;
+  border-radius: 8px 8px 0 0;
+}
+.rx-advice-toolbar-label {
+  font-size: 0.72rem;
+  color: #6b7d99;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  align-self: center;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.rx-adv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border: 1px solid #c8d6f0;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.15s;
+  white-space: nowrap;
+  user-select: none;
+}
+.rx-adv-btn:hover {
+  background: #1a4fa0;
+  color: #fff;
+  border-color: #1a4fa0;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(26,79,160,0.2);
+}
+.rx-adv-btn.red  { border-color: #e53e3e; color: #c53030; }
+.rx-adv-btn.red:hover  { background: #e53e3e; color: #fff; border-color: #e53e3e; }
+.rx-adv-btn.yellow { border-color: #d69e2e; color: #92600a; }
+.rx-adv-btn.yellow:hover { background: #d69e2e; color: #fff; border-color: #d69e2e; }
+.rx-adv-btn.black  { border-color: #2d3748; color: #1a202c; }
+.rx-adv-btn.black:hover  { background: #2d3748; color: #fff; border-color: #2d3748; }
+.rx-advice-color-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 2px;
+  flex-shrink: 0;
+}
+.dot-red    { background: #e53e3e; }
+.dot-yellow { background: #d69e2e; }
+.dot-black  { background: #2d3748; }
+
+/* ===== MEDICAL CERTIFICATES PAGE ===== */
+
+/* Patient info display card */
+.cert-patient-info {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f0f4fc 0%, #e8edfb 100%);
+  border: 1px solid #c8d6f0;
+  border-radius: var(--radius-sm);
+  animation: fadeInPage 0.3s ease;
+}
+.cert-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px 24px;
+}
+.cert-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #333;
+}
+.cert-info-item i {
+  color: var(--primary);
+  font-size: 0.85rem;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.cert-info-item strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+.cert-info-item span {
+  font-weight: 500;
+}
+
+/* Certificate type cards grid */
+.cert-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.cert-type-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.cert-type-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.cert-type-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(26, 79, 160, 0.15);
+  border-color: var(--primary);
+}
+.cert-type-card:hover::before {
+  opacity: 1;
+}
+.cert-type-card h4 {
+  font-size: 1.05rem;
+  color: #1a2d4d;
+  margin: 14px 0 8px;
+  font-weight: 700;
+}
+.cert-type-card p {
+  font-size: 0.82rem;
+  color: #6b7d99;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.cert-type-card .btn {
+  pointer-events: none; /* parent card handles click */
+}
+
+/* Certificate type icons */
+.cert-type-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+}
+.cert-type-card:hover .cert-type-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+.cert-type-icon.fitness {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #1565c0;
+}
+.cert-type-icon.rest {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  color: #e65100;
+}
+.cert-type-icon.resume {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+.cert-type-icon.general {
+  background: linear-gradient(135deg, #ede7f6, #d1c4e9);
+  color: #5e35b1;
+}
+
+/* Certificate print styles (screen preview too) */
+.cert-print {
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 10mm;
+  background: #fff;
+  color: #000;
+  font-family: 'Times New Roman', serif;
+  font-size: 13px;
+}
+.cert-print-title-band {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #1a4fa0;
+}
+.cert-print-title-band h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a4fa0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+  font-family: 'Times New Roman', serif;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+.cert-ref-line {
+  font-size: 11px;
+  color: #555;
+}
+.cert-print-body {
+  padding: 10px 0;
+  min-height: 250px;
+}
+.cert-body-to {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+  text-decoration: underline;
+  text-align: center;
+}
+.cert-body-text {
+  font-size: 15px;
+  line-height: 2;
+  text-align: justify;
+  margin-bottom: 12px;
+  color: #111;
+}
+.cert-body-text strong {
+  color: #000;
+}
+.cert-print-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 60px;
+  padding-top: 16px;
+}
+.cert-footer-left p {
+  font-size: 12px;
+  color: #333;
+  margin: 4px 0;
+}
+.cert-footer-right {
+  text-align: right;
+}
+.cert-sign-area {
+  text-align: center;
+}
+.cert-sign-line {
+  border-top: 1px solid #000;
+  width: 180px;
+  margin: 0 auto 6px;
+  margin-top: 40px;
+}
+.cert-doc-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a4fa0;
+  margin: 0;
+}
+.cert-sign-area p {
+  font-size: 11px;
+  color: #444;
+  margin: 2px 0;
+}
+.cert-print-seal {
+  text-align: right;
+  margin-top: 20px;
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+}
+
+/* ===== PATIENT RX HISTORY PANEL (Prescription Form) ===== */
+.rx-pat-history-panel {
+  margin: 10px 0 4px;
+  border: 1px solid #c8d6f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8faff 0%, #eef2fb 100%);
+  animation: fadeInPage 0.25s ease;
+}
+.rx-pat-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #1a4fa0 0%, #2d6cdf 100%);
+  color: #fff;
+}
+.rx-pat-history-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rx-pat-count-badge {
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.rx-pat-history-cards {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rx-hist-card {
+  background: #fff;
+  border: 1px solid #dde6f5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.rx-hist-card:hover {
+  box-shadow: 0 3px 10px rgba(26,79,160,0.1);
+  border-color: #a8c0e8;
+}
+.rx-hist-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.rx-hist-rxno {
+  background: #1a4fa0;
+  color: #fff;
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.rx-hist-date {
+  font-size: 0.78rem;
+  color: #5a6e8a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rx-hist-diag {
+  font-size: 0.78rem;
+  color: #2d7a22;
+  background: #eafae6;
+  border: 1px solid #b7e5ad;
+  border-radius: 10px;
+  padding: 1px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rx-hist-meds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.rx-hist-med-tag {
+  background: #e8f0fc;
+  border: 1px solid #c2d4f5;
+  color: #1a4fa0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.rx-hist-advice {
+  font-size: 0.75rem;
+  color: #7a6200;
+  background: #fffbea;
+  border-left: 3px solid #f5c518;
+  padding: 3px 8px;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.rx-hist-empty {
+  text-align: center;
+  color: #8a9bb5;
+  font-size: 0.82rem;
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OPD Management System – Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="login-body">
+
+  <!-- Animated background -->
+  <div class="login-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="login-container">
+    <!-- Left panel -->
+    <div class="login-left">
+      <div class="login-logo">
+        <div class="logo-icon">
+          <i class="fas fa-hospital-user"></i>
+        </div>
+        <h1>Dr. Kanojia's<br /><span>PreamSuman Clinic</span></h1>
+      </div>
+      <p class="login-tagline">Streamlining Patient Care &amp; Clinical Workflows</p>
+      <ul class="login-features">
+        <li><i class="fas fa-check-circle"></i> Patient Registration &amp; History</li>
+        <li><i class="fas fa-check-circle"></i> Smart Prescription Generation</li>
+        <li><i class="fas fa-check-circle"></i> OPD Billing &amp; Reports</li>
+        <li><i class="fas fa-check-circle"></i> Medicine Master from Excel</li>
+        <li><i class="fas fa-check-circle"></i> Appointment Management</li>
+      </ul>
+    </div>
+
+    <!-- Right panel – Login form -->
+    <div class="login-right">
+      <div class="login-card">
+        <div class="login-card-header">
+          <i class="fas fa-lock"></i>
+          <h2>Secure Login</h2>
+          <p>Access your clinic management portal</p>
+        </div>
+
+        <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group" id="fgUsername">
+            <label for="loginUsername"><i class="fas fa-user-md"></i> Username</label>
+            <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username" />
+          </div>
+
+          <div class="form-group" id="fgPassword">
+            <label for="loginPassword"><i class="fas fa-key"></i> Password</label>
+            <div class="password-wrap">
+              <input type="password" id="loginPassword" placeholder="Enter your password"
+                autocomplete="current-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw()">
+                <i class="fas fa-eye" id="pwEyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-error" id="loginError" style="display:none">
+            <i class="fas fa-exclamation-circle"></i> <span id="loginErrorMsg">Invalid credentials.</span>
+          </div>
+
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span id="loginBtnText"><i class="fas fa-sign-in-alt"></i> Login</span>
+            <span id="loginBtnLoader" style="display:none"><i class="fas fa-spinner fa-spin"></i> Verifying…</span>
+          </button>
+        </form>
+
+        <p class="login-hint">Default: <code>doctor</code> / <code>doctor@123</code></p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="login-dev-footer">
+    <p>Developed by <a href="https://mrgaurav154.github.io/Portfolio/" target="_blank" rel="noopener noreferrer">Gaurav Pawar</a></p>
+  </footer>
+
+  <script>
+    // Simple credential check (stored in localStorage for configurability)
+    function getCredentials() {
+      return {
+        username: localStorage.getItem('opd_username') || 'doctor',
+        password: localStorage.getItem('opd_password') || 'doctor@123'
+      };
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const uEl = document.getElementById('loginUsername');
+      const pEl = document.getElementById('loginPassword');
+      const errEl = document.getElementById('loginError');
+      const btnText = document.getElementById('loginBtnText');
+      const btnLoader = document.getElementById('loginBtnLoader');
+
+      errEl.style.display = 'none';
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'inline';
+
+      setTimeout(() => {
+        const creds = getCredentials();
+        if (uEl.value.trim() === creds.username && pEl.value === creds.password) {
+          sessionStorage.setItem('opd_logged_in', '1');
+          window.location.href = 'app.html';
+        } else {
+          btnText.style.display = 'inline';
+          btnLoader.style.display = 'none';
+          document.getElementById('loginErrorMsg').textContent =
+            'Invalid username or password. Please try again.';
+          errEl.style.display = 'flex';
+          document.getElementById('fgPassword').classList.add('shake');
+          setTimeout(() => document.getElementById('fgPassword').classList.remove('shake'), 500);
+        }
+      }, 700);
+    }
+
+    function togglePw() {
+      const inp = document.getElementById('loginPassword');
+      const ico = document.getElementById('pwEyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        ico.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        inp.type = 'password';
+        ico.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+  </script>
+</body>
+
+</html>

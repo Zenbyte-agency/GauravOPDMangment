@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OPD Management System – Dr. Kanojiya</title>
+  <meta name="description" content="Dr. Kanojiya's OPD Billing & Management System" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <button class="sidebar-toggle no-print" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar no-print" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="fas fa-hospital-user"></i></div>
+        <div class="sidebar-brand-text">
+          <h3>Dr. Kanojiya</h3>
+          <p>OPD Management</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <ul>
+          <li class="nav-item"><a class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')"><i
+                class="fas fa-th-large nav-icon"></i><span class="sidebar-label">Dashboard</span></a></li>
+        </ul>
+        <div class="sidebar-section-label">Management</div>
+        <ul>
+          <li class="nav-item">
+            <a class="nav-link" onclick="toggleSubmenu(this)"><i class="fas fa-cogs nav-icon"></i><span
+                class="sidebar-label">Masters</span><i class="fas fa-chevron-right arrow"></i></a>
+            <ul class="sub-menu">
+              <li><a class="nav-link" data-page="opdHead" onclick="showPage('opdHead')"><i
+                    class="fas fa-file-invoice-dollar nav-icon"></i><span class="sidebar-label">OPD Head</span></a></li>
+              <li><a class="nav-link" data-page="complaints" onclick="showPage('complaints')"><i
+                    class="fas fa-comment-medical nav-icon"></i><span class="sidebar-label">Complaint Master</span></a>
+              </li>
+              <li><a class="nav-link" data-page="diagnoses" onclick="showPage('diagnoses')"><i
+                    class="fas fa-stethoscope nav-icon"></i><span class="sidebar-label">Diagnosis Master</span></a></li>
+              <li><a class="nav-link" data-page="medicines" onclick="showPage('medicines')"><i
+                    class="fas fa-pills nav-icon"></i><span class="sidebar-label">Medicine Master</span></a></li>
+              <li><a class="nav-link" data-page="medDuration" onclick="showPage('medDuration')"><i
+                    class="fas fa-clock nav-icon"></i><span class="sidebar-label">Medicine Dur Days</span></a></li>
+              <li><a class="nav-link" data-page="medFreq" onclick="showPage('medFreq')"><i
+                    class="fas fa-capsules nav-icon"></i><span class="sidebar-label">Medicine Freq Master</span></a>
+              </li>
+              <li><a class="nav-link" data-page="mastRS" onclick="showPage('mastRS')"><i
+                    class="fas fa-lungs nav-icon"></i><span class="sidebar-label">RS/CVS/ABD/Sp.Inst</span></a></li>
+              <li><a class="nav-link" data-page="fyear" onclick="showPage('fyear')"><i
+                    class="fas fa-calendar-alt nav-icon"></i><span class="sidebar-label">Financial Year</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" data-page="patients" onclick="showPage('patients')"><i
+                class="fas fa-user-plus nav-icon"></i><span class="sidebar-label">Patient Registration</span></a></li>
+          <li class="nav-item"><a class="nav-link" data-page="opdBill" onclick="showPage('opdBill')"><i
+                class="fas fa-receipt nav-icon"></i><span class="sidebar-label">OPD Bill</span></a></li>
+          <li class="nav-item"><a class="nav-link" data-page="prescription" onclick="showPage('prescription')"><i
+                class="fas fa-prescription nav-icon"></i><span class="sidebar-label">Prescription</span></a></li>
+          <li class="nav-item"><a class="nav-link" data-page="opdDisplay" onclick="showPage('opdDisplay')"><i
+                class="fas fa-desktop nav-icon"></i><span class="sidebar-label">OPD Display</span></a></li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="toggleSubmenu(this)"><i class="fas fa-chart-bar nav-icon"></i><span
+                class="sidebar-label">Display / Reports</span><i class="fas fa-chevron-right arrow"></i></a>
+            <ul class="sub-menu">
+              <li><a class="nav-link" data-page="reports" onclick="showPage('reports')"><i
+                    class="fas fa-chart-line nav-icon"></i><span class="sidebar-label">Reports</span></a></li>
+              <li><a class="nav-link" data-page="medCertificates" onclick="showPage('medCertificates')"><i
+                    class="fas fa-file-medical nav-icon"></i><span class="sidebar-label">Medical Certificates</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" data-page="modRx" onclick="showPage('modRx')"><i
+                class="fas fa-edit nav-icon"></i><span class="sidebar-label">Mod. Prescription</span></a></li>
+          <li class="nav-item"><a class="nav-link" data-page="appointments" onclick="showPage('appointments')"><i
+                class="fas fa-calendar-check nav-icon"></i><span class="sidebar-label">Appointment</span></a></li>
+        </ul>
+        <div class="sidebar-section-label">Utilities</div>
+        <ul>
+          <li class="nav-item"><a class="nav-link" data-page="backupData" onclick="showPage('backupData')"><i
+                class="fas fa-database nav-icon"></i><span class="sidebar-label">Backup Data</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a class="nav-link" onclick="doLogout()"><i class="fas fa-sign-out-alt nav-icon"></i><span
+            class="sidebar-label">Logout</span></a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content" id="mainContent">
+      <header class="topbar no-print">
+        <div class="topbar-left">
+          <button class="sidebar-collapse-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <div class="breadcrumb"><i class="fas fa-home"></i> / <span id="breadcrumbPage">Dashboard</span></div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-fy" id="topbarFY"></div>
+          <div class="topbar-date-time">
+            <div class="topbar-date" id="topbarDate"></div>
+            <div class="topbar-time" id="topbarTime"></div>
+          </div>
+          <div class="topbar-user">
+            <div class="topbar-user-avatar">DK</div><span class="topbar-user-name">Dr. Kanojiya</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content" id="pageContent">
+        <!-- ===== DASHBOARD ===== -->
+        <section class="page-section active" id="page-dashboard">
+          <div class="page-header">
+            <h1><i class="fas fa-th-large"></i> Dashboard</h1>
+          </div>
+          <div class="stat-grid" id="dashStats"></div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="card-body">
+              <div class="quick-menu">
+                <a class="quick-card" onclick="showPage('patients')"><i class="fas fa-user-plus"></i>
+                  <p>New Patient</p>
+                </a>
+                <a class="quick-card" onclick="showPage('prescription')"><i class="fas fa-prescription"></i>
+                  <p>Prescription</p>
+                </a>
+                <a class="quick-card" onclick="showPage('opdBill')"><i class="fas fa-receipt"></i>
+                  <p>OPD Bill</p>
+                </a>
+                <a class="quick-card" onclick="showPage('appointments')"><i class="fas fa-calendar-check"></i>
+                  <p>Appointment</p>
+                </a>
+                <a class="quick-card" onclick="showPage('medicines')"><i class="fas fa-pills"></i>
+                  <p>Medicines</p>
+                </a>
+                <a class="quick-card" onclick="showPage('reports')"><i class="fas fa-chart-bar"></i>
+                  <p>Reports</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px">
+            <div class="card-header">
+              <h3><i class="fas fa-history"></i> Recent Patients</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="dashRecentTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Age/Gender</th>
+                      <th>Phone</th>
+                      <th>Reg Date</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== OPD HEAD ===== -->
+        <section class="page-section" id="page-opdHead">
+          <div class="page-header">
+            <h1><i class="fas fa-file-invoice-dollar"></i> OPD Head Master</h1><button class="btn btn-primary"
+              onclick="openOpdHeadModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="opdHeadTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Particulars</th>
+                      <th>Amount (₹)</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== COMPLAINT MASTER ===== -->
+        <section class="page-section" id="page-complaints">
+          <div class="page-header">
+            <h1><i class="fas fa-comment-medical"></i> Complaint Master</h1><button class="btn btn-primary"
+              onclick="openComplaintModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="complaintTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Complaint Name</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== DIAGNOSIS MASTER ===== -->
+        <section class="page-section" id="page-diagnoses">
+          <div class="page-header">
+            <h1><i class="fas fa-stethoscope"></i> Diagnosis Master</h1><button class="btn btn-primary"
+              onclick="openDiagnosisModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="diagnosisTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Diagnosis Name</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MEDICINE MASTER ===== -->
+        <section class="page-section" id="page-medicines">
+          <div class="page-header">
+            <h1><i class="fas fa-pills"></i> Medicine Master</h1>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-success" onclick="exportMedicinesToExcel()"><i class="fas fa-download"></i>
+                Download Excel</button>
+              <button class="btn btn-accent" onclick="document.getElementById('excelFileInput').click()"><i
+                  class="fas fa-file-excel"></i> Import Excel</button>
+              <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none"
+                onchange="importMedicinesFromExcel(event)" />
+              <button class="btn btn-primary" onclick="openMedicineModal()"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search</h3>
+              <div class="search-bar">
+                <div class="search-input-wrap"><i class="fas fa-search"></i><input type="text" id="medSearchInput"
+                    placeholder="Search medicine…" oninput="renderMedicines()" /></div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="medicineTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Medicine Name</th>
+                      <th>Type</th>
+                      <th>Category</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MED DURATION ===== -->
+        <section class="page-section" id="page-medDuration">
+          <div class="page-header">
+            <h1><i class="fas fa-clock"></i> Medicine Duration Days</h1><button class="btn btn-primary"
+              onclick="openDurModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="durTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Days</th>
+                      <th>Label</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MEDICINE FREQUENCY MASTER ===== -->
+        <section class="page-section" id="page-medFreq">
+          <div class="page-header">
+            <h1><i class="fas fa-capsules"></i> Medicine Frequency Master</h1><button class="btn btn-primary"
+              onclick="openMedFreqModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search</h3>
+              <div class="search-bar">
+                <div class="search-input-wrap"><i class="fas fa-search"></i><input type="text" id="medFreqSearch"
+                    placeholder="Search medicine…" oninput="renderMedFreq()" /></div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="medFreqTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>Medicine Name</th>
+                      <th>Frequency</th>
+                      <th>F.Type</th>
+                      <th>Timing</th>
+                      <th>No.Days</th>
+                      <th>Int.Abt Med</th>
+                      <th>Advice</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MAST RS/CVS/ABD ===== -->
+        <section class="page-section" id="page-mastRS">
+          <div class="page-header">
+            <h1><i class="fas fa-lungs"></i> RS / CVS / ABD / Sp.Inst</h1><button class="btn btn-primary"
+              onclick="openRSModal()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="rsTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.No</th>
+                      <th>System</th>
+                      <th>Finding</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== FINANCIAL YEAR ===== -->
+        <section class="page-section" id="page-fyear">
+          <div class="page-header">
+            <h1><i class="fas fa-calendar-alt"></i> Financial Year</h1>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">Start Date</label><input type="date"
+                    class="form-control" id="fyStart" /></div>
+                <div class="form-col"><label class="form-label">End Date</label><input type="date" class="form-control"
+                    id="fyEnd" /></div>
+              </div>
+              <button class="btn btn-primary" onclick="saveFYear()"><i class="fas fa-save"></i> Save Financial
+                Year</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== PATIENT REGISTRATION ===== -->
+        <section class="page-section" id="page-patients">
+          <div class="page-header">
+            <h1><i class="fas fa-user-plus"></i> Patient Registration</h1>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-success" onclick="exportPatientsToExcel()"><i class="fas fa-download"></i> Download
+                Excel</button>
+              <button class="btn btn-accent" onclick="document.getElementById('patExcelFileInput').click()"><i
+                  class="fas fa-file-excel"></i> Import Excel</button>
+              <input type="file" id="patExcelFileInput" accept=".xlsx,.xls,.csv" style="display:none"
+                onchange="importPatientsFromExcel(event)" />
+              <button class="btn btn-primary" onclick="openPatientModal()"><i class="fas fa-plus"></i> New
+                Patient</button>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search Patient</h3>
+            </div>
+            <div class="card-body">
+              <div class="search-bar">
+                <div class="search-input-wrap"><i class="fas fa-search"></i><input type="text" id="patSearchInput"
+                    placeholder="Search by name, phone, ID…" oninput="renderPatients()" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="patientTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Phone</th>
+                      <th>Address</th>
+                      <th>Reg Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== OPD BILL ===== -->
+        <section class="page-section" id="page-opdBill">
+          <div class="page-header">
+            <h1><i class="fas fa-receipt"></i> OPD Bill</h1><button class="btn btn-warning" onclick="resetBillForm()"><i
+                class="fas fa-file"></i> New</button>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">Date</label><input type="date" class="form-control"
+                    id="billDate" /></div>
+                <div class="form-col"><label class="form-label">Sr. No</label><input type="text" class="form-control"
+                    id="billSrNo" readonly /></div>
+                <div class="form-col"><label class="form-label">Bill No</label><input type="text" class="form-control"
+                    id="billNo" readonly /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">Patient Reg. No.</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="billRegNo"
+                      placeholder="Enter Reg No…" autocomplete="off" oninput="lookupPatientByRegNo()" />
+                    <div class="autocomplete-list" id="billRegNoList"></div>
+                  </div>
+                </div>
+                <div class="form-col"><label class="form-label">Ph. No.</label><input type="text" class="form-control"
+                    id="billPhNo" readonly /></div>
+                <div class="form-col"><label class="form-label">Previous Balance</label><input type="number"
+                    class="form-control" id="billPrevBal" value="0" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col-2"><label class="form-label">Patient Name</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="billPatient"
+                      placeholder="Type patient name…" autocomplete="off" />
+                    <div class="autocomplete-list" id="billPatientList"></div>
+                  </div>
+                </div>
+              </div>
+              <h3 style="margin:16px 0 10px;font-size:0.95rem"><i class="fas fa-list" style="color:var(--primary)"></i>
+                Bill Items</h3>
+              <div id="billItemsContainer"></div>
+              <button class="btn btn-outline btn-sm" style="margin:8px 0" onclick="addBillItemRow()"><i
+                  class="fas fa-plus"></i> Add Item</button>
+              <div class="bill-totals-grid">
+                <div class="form-row">
+                  <div class="form-col"></div>
+                  <div class="form-col"><label class="form-label">Total Amount</label><input type="number"
+                      class="form-control" id="billTotalAmt" readonly /></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col"></div>
+                  <div class="form-col"><label class="form-label">Disc. Amount</label><input type="number"
+                      class="form-control" id="billDiscAmt" value="0" oninput="calcBillFinal()" /></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col"></div>
+                  <div class="form-col"><label class="form-label">Rec. Amount</label><input type="number"
+                      class="form-control" id="billRecAmt" value="0" oninput="calcBillFinal()" /></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col"></div>
+                  <div class="form-col"><label class="form-label">Bal. Amount</label><input type="number"
+                      class="form-control" id="billBalAmt" readonly /></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+                <button class="btn btn-warning" onclick="resetBillForm()"><i class="fas fa-file"></i> New</button>
+                <button class="btn btn-success" onclick="saveBill()"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-primary" onclick="saveBillAndPrint()"><i class="fas fa-print"></i> Print</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px">
+            <div class="card-header">
+              <h3><i class="fas fa-history"></i> Recent Bills</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="billHistoryTable">
+                  <thead>
+                    <tr>
+                      <th>Bill No</th>
+                      <th>Patient</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Disc</th>
+                      <th>Rec</th>
+                      <th>Bal</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== PRESCRIPTION ===== -->
+        <section class="page-section" id="page-prescription">
+          <div class="page-header">
+            <h1><i class="fas fa-prescription"></i> Prescription</h1>
+            <div style="display:flex;gap:10px"><button class="btn btn-accent" onclick="findOldRx()"><i
+                  class="fas fa-search"></i> Find Old</button></div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">Date</label><input type="date" class="form-control"
+                    id="rxDate" /></div>
+                <div class="form-col"><label class="form-label">Pt. No.</label><input type="text" class="form-control"
+                    id="rxPtNo" readonly placeholder="Auto" /></div>
+                <div class="form-col-2"><label class="form-label">Patient Name</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="rxPatient"
+                      placeholder="Type patient name…" autocomplete="off" />
+                    <div class="autocomplete-list" id="rxPatientList"></div>
+                  </div>
+                </div>
+                <div class="form-col"><label class="form-label">Sex</label><input type="text" class="form-control"
+                    id="rxSex" readonly /></div>
+                <div class="form-col"><label class="form-label">Age</label><input type="text" class="form-control"
+                    id="rxAge" readonly /></div>
+              </div>
+              <div id="rxDrugAllergyBanner" class="drug-allergy-banner" style="display:none">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div><strong>Drug Allergy:</strong> <span id="rxDrugAllergyText"></span></div>
+              </div>
+              <!-- Patient Rx History Panel -->
+              <div id="rxPatientHistory" style="display:none" class="rx-pat-history-panel">
+                <div class="rx-pat-history-header">
+                  <span class="rx-pat-history-title"><i class="fas fa-history"></i> Past Prescriptions</span>
+                  <span id="rxPatRxCount" class="rx-pat-count-badge">0 Total</span>
+                </div>
+                <div id="rxPatHistoryCards" class="rx-pat-history-cards"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">SpO2</label><input type="text" class="form-control"
+                    id="rxSpO2" placeholder="e.g. 98%" /></div>
+                <div class="form-col"><label class="form-label">BP</label><input type="text" class="form-control"
+                    id="rxBP" placeholder="e.g. 120/80" /></div>
+                <div class="form-col"><label class="form-label">Pulse</label><input type="text" class="form-control"
+                    id="rxPulse" placeholder="e.g. 78" /></div>
+                <div class="form-col"><label class="form-label">Temp (°F)</label><input type="text" class="form-control"
+                    id="rxTemp" placeholder="e.g. 98.6" /></div>
+                <div class="form-col"><label class="form-label">General</label><input type="text" class="form-control"
+                    id="rxGeneral" placeholder="General exam" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">RS</label><select class="form-control" id="rxRS">
+                    <option value="">--</option>
+                  </select></div>
+                <div class="form-col"><label class="form-label">CVS</label><select class="form-control" id="rxCVS">
+                    <option value="">--</option>
+                  </select></div>
+                <div class="form-col"><label class="form-label">Abdomen</label><select class="form-control" id="rxABD">
+                    <option value="">--</option>
+                  </select></div>
+                <div class="form-col"><label class="form-label">CNS</label><select class="form-control" id="rxCNS">
+                    <option value="">--</option>
+                  </select></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col-full"><label class="form-label">Past History</label><input type="text"
+                    class="form-control" id="rxPastHistory" placeholder="Past medical history…" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col-2"><label class="form-label">Complaints</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="rxComplaint"
+                      placeholder="Select or type complaint…" autocomplete="off" />
+                    <div class="autocomplete-list" id="rxComplaintList"></div>
+                  </div>
+                </div>
+                <div class="form-col"><label class="form-label">Invest. Req.</label><input type="text"
+                    class="form-control" id="rxInvestReq" placeholder="Investigation required…" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col-full"><label class="form-label">Diagnosis</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="rxDiagnosis"
+                      placeholder="Select or type diagnosis…" autocomplete="off" />
+                    <div class="autocomplete-list" id="rxDiagnosisList"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col-full"><label class="form-label">Treatment Advised</label><input type="text"
+                    class="form-control" id="rxTreatAdvised" placeholder="Treatment advised…" /></div>
+              </div>
+              <h3 style="margin:18px 0 10px;font-size:0.95rem"><i class="fas fa-pills" style="color:var(--primary)"></i>
+                Medicines (Rx)</h3>
+              <div class="rx-med-header-row">
+                <div class="rx-hcol-name">Medicine Name</div>
+                <div class="rx-hcol-sm">Frequency</div>
+                <div class="rx-hcol-sm">F.Type</div>
+                <div class="rx-hcol-sm">ND</div>
+                <div class="rx-hcol-sm">Int.Abt.Medicine</div>
+                <div class="rx-hcol-btn"></div>
+              </div>
+              <div id="rxMedsContainer"></div>
+              <button class="btn btn-outline btn-sm" style="margin:8px 0" onclick="addRxMedRow()"><i
+                  class="fas fa-plus"></i> Add Medicine</button>
+              <div style="margin-top:12px;">
+                <h4 style="font-size:0.9rem;color:#856404;margin-bottom:8px;text-align:left"><i
+                    class="fas fa-sticky-note"></i>
+                  Instructions / Advice</h4>
+                <textarea class="form-control" id="rxAdvice" rows="5" style="font-size:0.85rem"></textarea>
+                <h4 style="font-size:0.9rem;color:#856404;margin-bottom:8px;text-align:left"><i
+                    class="fas fa-sticky-note"></i> Instructions / Advice</h4>
+                <!-- Emoji / Quick-phrase toolbar -->
+                <div class="rx-advice-toolbar">
+                  <span class="rx-advice-toolbar-label">🍽️ Diet:</span>
+                  <button type="button" class="rx-adv-btn yellow"
+                    onclick="insertAdviceEmoji('🍚 हल्का खाना खाएं (दलिया, खिचड़ी)')">🍚 हल्का खाना</button>
+                  <button type="button" class="rx-adv-btn yellow"
+                    onclick="insertAdviceEmoji('🚫 तेल / मसालेदार / जंक फूड से बचें')">🚫 तेल-मसाला बंद</button>
+                  <button type="button" class="rx-adv-btn yellow" onclick="insertAdviceEmoji('💧 भरपूर पानी पिएं')">💧
+                    पानी पिएं</button>
+                  <button type="button" class="rx-adv-btn yellow"
+                    onclick="insertAdviceEmoji('🧃 ताजे फल व सब्जियां खाएं')">🧃 फल-सब्जी</button>
+
+                  <span class="rx-advice-toolbar-label" style="margin-left:6px;">😴 Rest:</span>
+                  <button type="button" class="rx-adv-btn black" onclick="insertAdviceEmoji('😴 पर्याप्त आराम करें')">😴
+                    आराम करें</button>
+                  <button type="button" class="rx-adv-btn black"
+                    onclick="insertAdviceEmoji('🚶 हल्की सैर करें (सुबह-शाम)')">🚶 हल्की सैर</button>
+                  <button type="button" class="rx-adv-btn black"
+                    onclick="insertAdviceEmoji('🏋️ भारी काम / व्यायाम से बचें')">🏋️ भारी काम बंद</button>
+
+                  <span class="rx-advice-toolbar-label" style="margin-left:6px;">🧼 Hygiene:</span>
+                  <button type="button" class="rx-adv-btn black"
+                    onclick="insertAdviceEmoji('🧼 हाथ नियमित साफ करें')">🧼 हाथ साफ</button>
+                  <button type="button" class="rx-adv-btn black"
+                    onclick="insertAdviceEmoji('😷 मास्क पहनें (भीड़ में)')">😷 मास्क</button>
+
+                  <span class="rx-advice-toolbar-label" style="margin-left:6px;">⚠️ Warning:</span>
+                  <button type="button" class="rx-adv-btn red"
+                    onclick="insertAdviceEmoji('🚫 दवाई बंद न करें (Doctor से बिना पूछे)')">🚫 दवाई बंद न करें</button>
+                  <button type="button" class="rx-adv-btn red"
+                    onclick="insertAdviceEmoji('🌡️ बुखार बढ़ने पर तुरंत Doctor से मिलें')">🌡️ बुखार</button>
+                  <button type="button" class="rx-adv-btn red"
+                    onclick="insertAdviceEmoji('🚨 दवा से Reaction हो तो तुरंत Doctor से मिलें')">🚨 Drug
+                    Reaction</button>
+                  <button type="button" class="rx-adv-btn red"
+                    onclick="insertAdviceEmoji('🩸 Admit होना जरुरी है / पेशंट और संबंधी admit होणे को तयार नहीं है / पेशंट Serious  है')">🩸
+                    Emergency</button>
+                </div>
+                <textarea class="form-control" id="rxAdvice" rows="5"
+                  style="font-size:0.85rem;border-radius:0 0 8px 8px;border-top:none"></textarea>
+
+              </div>
+              <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+                <button class="btn btn-success" onclick="saveRx()"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-primary" onclick="saveAndPrintRx()"><i class="fas fa-print"></i> Save &amp;
+                  Print</button>
+                <button class="btn btn-warning" onclick="clearRxForm()"><i class="fas fa-eraser"></i> Clear</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== OPD DISPLAY ===== -->
+        <section class="page-section" id="page-opdDisplay">
+          <div class="page-header">
+            <h1><i class="fas fa-desktop"></i> OPD Display</h1>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><input type="text" class="form-control" id="opdDispSearch"
+                    placeholder="Search patient name or ID…" oninput="renderOpdDisplay()" /></div>
+                <div class="form-col"><input type="date" class="form-control" id="opdDispDate"
+                    onchange="renderOpdDisplay()" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="opdDispTable">
+                  <thead>
+                    <tr>
+                      <th>Rx No</th>
+                      <th>Patient</th>
+                      <th>Date</th>
+                      <th>Complaint</th>
+                      <th>Diagnosis</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== REPORTS ===== -->
+        <section class="page-section" id="page-reports">
+          <div class="page-header">
+            <h1><i class="fas fa-chart-bar"></i> Display / Reports</h1>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="tabs"><button class="tab-btn active"
+                  onclick="switchTab(this,'reportPatients')">Patients</button><button class="tab-btn"
+                  onclick="switchTab(this,'reportBills')">Bills</button><button class="tab-btn"
+                  onclick="switchTab(this,'reportRx')">Prescriptions</button></div>
+              <div class="tab-panel active" id="reportPatients">
+                <div class="form-row">
+                  <div class="form-col"><input type="date" class="form-control" id="rptPatFrom" /></div>
+                  <div class="form-col"><input type="date" class="form-control" id="rptPatTo" /></div>
+                  <div><button class="btn btn-primary" onclick="genPatientReport()"><i class="fas fa-filter"></i>
+                      Filter</button></div>
+                </div>
+                <div class="table-responsive" style="margin-top:14px">
+                  <table class="data-table" id="rptPatTable">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age/Gender</th>
+                        <th>Phone</th>
+                        <th>Reg Date</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-panel" id="reportBills">
+                <div class="form-row">
+                  <div class="form-col"><input type="date" class="form-control" id="rptBillFrom" /></div>
+                  <div class="form-col"><input type="date" class="form-control" id="rptBillTo" /></div>
+                  <div><button class="btn btn-primary" onclick="genBillReport()"><i class="fas fa-filter"></i>
+                      Filter</button></div>
+                </div>
+                <div class="table-responsive" style="margin-top:14px">
+                  <table class="data-table" id="rptBillTable">
+                    <thead>
+                      <tr>
+                        <th>Bill No</th>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div style="margin-top:10px;font-weight:700" id="rptBillTotal"></div>
+              </div>
+              <div class="tab-panel" id="reportRx">
+                <div class="form-row">
+                  <div class="form-col"><input type="date" class="form-control" id="rptRxFrom" /></div>
+                  <div class="form-col"><input type="date" class="form-control" id="rptRxTo" /></div>
+                  <div><button class="btn btn-primary" onclick="genRxReport()"><i class="fas fa-filter"></i>
+                      Filter</button></div>
+                </div>
+                <div class="table-responsive" style="margin-top:14px">
+                  <table class="data-table" id="rptRxTable">
+                    <thead>
+                      <tr>
+                        <th>Rx No</th>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MEDICAL CERTIFICATES ===== -->
+        <section class="page-section" id="page-medCertificates">
+          <div class="page-header">
+            <h1><i class="fas fa-file-medical"></i> Medical Certificates</h1>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <div class="cert-count-badge" id="certTotalCountBadge" title="Total certificates issued">
+                <i class="fas fa-certificate"></i>
+                <span id="certTotalCount">0</span> Issued
+              </div>
+              <button class="btn btn-accent" onclick="toggleCertHistory()">
+                <i class="fas fa-history"></i> History
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search Patient</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col-2">
+                  <label class="form-label">Patient Name</label>
+                  <div class="autocomplete-wrap"><input type="text" class="form-control" id="certPatientSearch"
+                      placeholder="Type patient name…" autocomplete="off" />
+                    <div class="autocomplete-list" id="certPatientList"></div>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Aadhaar Number</label>
+                  <input type="text" class="form-control" id="certAadhaarNo" placeholder="Enter 12-digit Aadhaar No."
+                    maxlength="14" />
+                </div>
+              </div>
+              <!-- Selected patient info display -->
+              <div id="certPatientInfo" class="cert-patient-info" style="display:none">
+                <div class="cert-info-grid">
+                  <div class="cert-info-item"><i class="fas fa-id-badge"></i> <strong>Reg No:</strong> <span
+                      id="certPatRegNo">-</span></div>
+                  <div class="cert-info-item"><i class="fas fa-user"></i> <strong>Name:</strong> <span
+                      id="certPatName">-</span></div>
+                  <div class="cert-info-item"><i class="fas fa-birthday-cake"></i> <strong>Age:</strong> <span
+                      id="certPatAge">-</span></div>
+                  <div class="cert-info-item"><i class="fas fa-venus-mars"></i> <strong>Gender:</strong> <span
+                      id="certPatGender">-</span></div>
+                  <div class="cert-info-item"><i class="fas fa-phone"></i> <strong>Phone:</strong> <span
+                      id="certPatPhone">-</span></div>
+                  <div class="cert-info-item"><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> <span
+                      id="certPatAddress">-</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px">
+            <div class="card-header">
+              <h3><i class="fas fa-certificate"></i> Select Certificate Type</h3>
+            </div>
+            <div class="card-body">
+              <div class="cert-cards-grid">
+                <div class="cert-type-card" onclick="generateCertificate('fitness')">
+                  <div class="cert-type-icon fitness"><i class="fas fa-running"></i></div>
+                  <h4>Fitness for Job</h4>
+                  <p>Certifies the patient is medically fit to perform duty/job</p>
+                  <button class="btn btn-primary btn-sm"><i class="fas fa-print"></i> Generate &amp; Print</button>
+                </div>
+                <div class="cert-type-card" onclick="generateCertificate('rest')">
+                  <div class="cert-type-icon rest"><i class="fas fa-bed"></i></div>
+                  <h4>Rest Certificate</h4>
+                  <p>Certifies the patient needs rest for a specified period</p>
+                  <button class="btn btn-accent btn-sm"><i class="fas fa-print"></i> Generate &amp; Print</button>
+                </div>
+                <div class="cert-type-card" onclick="generateCertificate('resume')">
+                  <div class="cert-type-icon resume"><i class="fas fa-briefcase-medical"></i></div>
+                  <h4>Resume Duty Certificate</h4>
+                  <p>Certifies the patient is fit to resume duties after illness</p>
+                  <button class="btn btn-success btn-sm"><i class="fas fa-print"></i> Generate &amp; Print</button>
+                </div>
+                <div class="cert-type-card" onclick="generateCertificate('general')">
+                  <div class="cert-type-icon general"><i class="fas fa-file-alt"></i></div>
+                  <h4>General Certificate</h4>
+                  <p>Common certificate format for any general purpose with reason</p>
+                  <button class="btn btn-primary btn-sm"><i class="fas fa-print"></i> Generate &amp; Print</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inline certificate form fields for rest/resume certificates -->
+          <div id="certExtraFields" class="card" style="margin-top:20px;display:none">
+            <div class="card-header">
+              <h3><i class="fas fa-edit"></i> <span id="certExtraTitle">Certificate Details</span></h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Date of Issue</label>
+                  <input type="date" class="form-control" id="certDateOfIssue" />
+                </div>
+              </div>
+              <div class="form-row" id="certRestFields" style="display:none">
+                <div class="form-col">
+                  <label class="form-label">Rest From Date</label>
+                  <input type="date" class="form-control" id="certRestFrom" />
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Rest To Date</label>
+                  <input type="date" class="form-control" id="certRestTo" />
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Diagnosis / Reason</label>
+                  <input type="text" class="form-control" id="certRestDiagnosis" placeholder="e.g. Viral Fever" />
+                </div>
+              </div>
+              <div class="form-row" id="certResumeFields" style="display:none">
+                <div class="form-col">
+                  <label class="form-label">Was on Rest From</label>
+                  <input type="date" class="form-control" id="certResumeFrom" />
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Rest Until</label>
+                  <input type="date" class="form-control" id="certResumeUntil" />
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Resume Duty From</label>
+                  <input type="date" class="form-control" id="certResumeDate" />
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Diagnosis / Reason</label>
+                  <input type="text" class="form-control" id="certResumeDiagnosis"
+                    placeholder="e.g. Recovered from illness" />
+                </div>
+              </div>
+              <div class="form-row" id="certGeneralFields" style="display:none">
+                <div class="form-col-full">
+                  <label class="form-label">Reason of Certificate</label>
+                  <input type="text" class="form-control" id="certGeneralReason"
+                    placeholder="e.g. For school admission, travel, insurance claim…" />
+                </div>
+              </div>
+              <div style="margin-top:14px">
+                <button class="btn btn-primary" id="certPrintBtn" onclick="printCurrentCertificate()"><i
+                    class="fas fa-print"></i> Print Certificate</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== CERTIFICATE HISTORY PANEL ===== -->
+          <div id="certHistoryPanel" class="card" style="margin-top:20px;display:none">
+            <div class="card-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+              <h3><i class="fas fa-history"></i> Certificate History</h3>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <div class="search-input-wrap" style="min-width:200px">
+                  <i class="fas fa-search"></i>
+                  <input type="text" id="certHistorySearch" placeholder="Search by patient or type…"
+                    oninput="renderCertHistory()" style="height:36px" />
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="toggleCertHistory()">
+                  <i class="fas fa-times"></i> Close
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="certHistoryTable">
+                  <thead>
+                    <tr>
+                      <th>Sr.</th>
+                      <th>Patient Name</th>
+                      <th>Certificate Type</th>
+                      <th>Reason / Diagnosis</th>
+                      <th>Date &amp; Time</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MOD PRESCRIPTION ===== -->
+        <section class="page-section" id="page-modRx">
+          <div class="page-header">
+            <h1><i class="fas fa-edit"></i> Modify Prescription</h1>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-search"></i> Search Prescription</h3>
+            </div>
+            <div class="card-body">
+              <div class="search-bar">
+                <div class="search-input-wrap"><i class="fas fa-search"></i><input type="text" id="modRxSearch"
+                    placeholder="Search by Rx No or patient name…" oninput="renderModRxList()" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="modRxTable">
+                  <thead>
+                    <tr>
+                      <th>Rx No</th>
+                      <th>Patient</th>
+                      <th>Date</th>
+                      <th>Diagnosis</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== APPOINTMENTS ===== -->
+        <section class="page-section" id="page-appointments">
+          <div class="page-header">
+            <h1><i class="fas fa-calendar-check"></i> Appointments</h1><button class="btn btn-primary"
+              onclick="openApptModal()"><i class="fas fa-plus"></i> New Appointment</button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-filter"></i> Filter</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><input type="date" class="form-control" id="apptFilterDate"
+                    onchange="renderAppointments()" /></div>
+                <div class="form-col"><select class="form-control" id="apptFilterStatus"
+                    onchange="renderAppointments()">
+                    <option value="">All Status</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="apptTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Patient</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Purpose</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== BACKUP DATA ===== -->
+        <section class="page-section" id="page-backupData">
+          <div class="page-header">
+            <h1><i class="fas fa-database"></i> Backup Data</h1>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-download"></i> Export Data to Excel</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">From Date</label><input type="date" class="form-control"
+                    id="backupFromDate" /></div>
+                <div class="form-col"><label class="form-label">To Date</label><input type="date" class="form-control"
+                    id="backupToDate" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col"><label class="form-label">Select Data to Export</label>
+                  <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
+                    <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="backupPatients"
+                        checked /> Patients</label>
+                    <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="backupBills"
+                        checked /> Bills</label>
+                    <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="backupRx"
+                        checked /> Prescriptions</label>
+                    <label style="display:flex;align-items:center;gap:6px"><input type="checkbox"
+                        id="backupAppointments" /> Appointments</label>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+                <button class="btn btn-success" onclick="exportBackupData()"><i class="fas fa-download"></i> Export to
+                  Excel</button>
+                <button class="btn btn-info" onclick="exportAllBackupData()"><i class="fas fa-archive"></i> Export All
+                  Data</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-header">
+              <h3><i class="fas fa-info-circle"></i> Information</h3>
+            </div>
+            <div class="card-body">
+              <p><strong>About Backup Data:</strong></p>
+              <ul style="margin:8px 0;padding-left:20px;line-height:1.8">
+                <li>Select date range and data types to export</li>
+                <li>Data will be exported to Excel format (.xlsx)</li>
+                <li>File will be saved to your system's Downloads folder</li>
+                <li>Use this feature regularly to backup your clinic data</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="status-bar no-print">
+        <span><i class="fas fa-calendar"></i> <span id="statusFY"></span></span>
+        <span><i class="fas fa-users"></i> Patients: <span id="statusPatCount">0</span></span>
+        <span><i class="fas fa-clock"></i> <span id="statusTime"></span></span>
+        <span class="dev-credit"><i class="fas fa-code"></i> Developed by <a
+            href="https://mrgaurav154.github.io/Portfolio/" target="_blank" rel="noopener noreferrer">Gaurav
+            Pawar</a></span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ===== MODALS ===== -->
+  <!-- OPD Head Modal -->
+  <div class="modal-overlay" id="modalOpdHead">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-invoice-dollar"></i> <span id="opdHeadModalTitle">Add OPD Head</span></h3><button
+          class="modal-close" onclick="closeModal('modalOpdHead')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="opdHeadEditId" />
+        <div class="form-row">
+          <div class="form-col-2"><label class="form-label">Particulars</label><input type="text" class="form-control"
+              id="opdHeadParticular" /></div>
+          <div class="form-col"><label class="form-label">Amount (₹)</label><input type="number" class="form-control"
+              id="opdHeadAmount" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveOpdHead()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Complaint Modal -->
+  <div class="modal-overlay" id="modalComplaint">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-comment-medical"></i> <span id="complaintModalTitle">Add Complaint</span></h3><button
+          class="modal-close" onclick="closeModal('modalComplaint')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="complaintEditId" />
+        <div class="form-row">
+          <div class="form-col-full"><label class="form-label">Complaint Name</label><input type="text"
+              class="form-control" id="complaintName" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveComplaint()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Diagnosis Modal -->
+  <div class="modal-overlay" id="modalDiagnosis">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-stethoscope"></i> <span id="diagnosisModalTitle">Add Diagnosis</span></h3><button
+          class="modal-close" onclick="closeModal('modalDiagnosis')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="diagnosisEditId" />
+        <div class="form-row">
+          <div class="form-col-full"><label class="form-label">Diagnosis Name</label><input type="text"
+              class="form-control" id="diagnosisName" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveDiagnosis()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Medicine Modal -->
+  <div class="modal-overlay" id="modalMedicine">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-pills"></i> <span id="medicineModalTitle">Add Medicine</span></h3><button
+          class="modal-close" onclick="closeModal('modalMedicine')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="medicineEditId" />
+        <div class="form-row">
+          <div class="form-col-2"><label class="form-label">Medicine Name</label><input type="text" class="form-control"
+              id="medicineName" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Type</label><select class="form-control" id="medicineType">
+              <option>Tablet</option>
+              <option>Capsule</option>
+              <option>Syrup</option>
+              <option>Injection</option>
+              <option>Cream</option>
+              <option>Drops</option>
+              <option>Inhaler</option>
+              <option>Powder</option>
+              <option>Other</option>
+            </select></div>
+          <div class="form-col"><label class="form-label">Category</label><input type="text" class="form-control"
+              id="medicineCategory" placeholder="e.g. Antibiotic" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveMedicine()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Duration Modal -->
+  <div class="modal-overlay" id="modalDur">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-clock"></i> <span id="durModalTitle">Add Duration</span></h3><button class="modal-close"
+          onclick="closeModal('modalDur')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="durEditId" />
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Days</label><input type="number" class="form-control"
+              id="durDays" /></div>
+          <div class="form-col"><label class="form-label">Label</label><input type="text" class="form-control"
+              id="durLabel" placeholder="e.g. 7 Days" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveDur()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- RS Modal -->
+  <div class="modal-overlay" id="modalRS">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-lungs"></i> <span id="rsModalTitle">Add Finding</span></h3><button class="modal-close"
+          onclick="closeModal('modalRS')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="rsEditId" />
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">System</label><select class="form-control" id="rsSystem">
+              <option>RS</option>
+              <option>CVS</option>
+              <option>ABD</option>
+              <option>CNS</option>
+              <option>Sp.Inst</option>
+            </select></div>
+          <div class="form-col-2"><label class="form-label">Finding</label><input type="text" class="form-control"
+              id="rsFinding" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveRS()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Patient Modal -->
+  <div class="modal-overlay" id="modalPatient">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus"></i> <span id="patientModalTitle">New Patient</span></h3><button
+          class="modal-close" onclick="closeModal('modalPatient')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="patEditId" />
+        <div class="form-row">
+          <div class="form-col" style="flex:0 0 180px"><label class="form-label"><i class="fas fa-id-badge"
+                style="color:var(--primary)"></i> Registration No.</label><input type="text" class="form-control"
+              id="patRegNo" readonly
+              style="font-weight:700;font-size:1.1rem;color:var(--primary);background:var(--bg-light);letter-spacing:1px;text-align:center" />
+          </div>
+          <div class="form-col"><label class="form-label">Reg Date</label><input type="date" class="form-control"
+              id="patRegDate" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col-2"><label class="form-label">Full Name *</label><input type="text" class="form-control"
+              id="patName" /></div>
+          <div class="form-col"><label class="form-label">Age *</label><input type="number" class="form-control"
+              id="patAge" /></div>
+          <div class="form-col"><label class="form-label">Gender *</label><select class="form-control" id="patGender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Phone</label><input type="text" class="form-control"
+              id="patPhone" /></div>
+          <div class="form-col-2"><label class="form-label">Address</label><input type="text" class="form-control"
+              id="patAddress" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col-full"><label class="form-label"><i class="fas fa-exclamation-triangle"
+                style="color:var(--danger)"></i> Drug Allergy</label><input type="text" class="form-control"
+              id="patDrugAllergy" placeholder="e.g. Penicillin, Sulfa drugs, Aspirin… (leave blank if none)" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col-full"><label class="form-label"><i class="fas fa-history"
+                style="color:var(--accent)"></i> Past History</label><textarea class="form-control" id="patPastHistory"
+              rows="3"
+              placeholder="e.g. DM2, HTN, Hypothyroidism, Any surgery, Known allergies… (leave blank if none)"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="savePatient()"><i class="fas fa-save"></i> Save
+          Patient</button></div>
+    </div>
+  </div>
+
+  <!-- Appointment Modal -->
+  <div class="modal-overlay" id="modalAppt">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-check"></i> <span id="apptModalTitle">New Appointment</span></h3><button
+          class="modal-close" onclick="closeModal('modalAppt')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="apptEditId" />
+        <div class="form-row">
+          <div class="form-col-2"><label class="form-label">Patient</label>
+            <div class="autocomplete-wrap"><input type="text" class="form-control" id="apptPatient"
+                placeholder="Type patient name…" autocomplete="off" />
+              <div class="autocomplete-list" id="apptPatientList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Date</label><input type="date" class="form-control"
+              id="apptDate" /></div>
+          <div class="form-col"><label class="form-label">Time</label><input type="time" class="form-control"
+              id="apptTime" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col-full"><label class="form-label">Purpose</label><input type="text" class="form-control"
+              id="apptPurpose" placeholder="Consultation, Follow-up, etc." /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Status</label><select class="form-control" id="apptStatus">
+              <option>Scheduled</option>
+              <option>Completed</option>
+              <option>Cancelled</option>
+            </select></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveAppt()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Med Frequency Modal -->
+  <div class="modal-overlay" id="modalMedFreq">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-capsules"></i> <span id="medFreqModalTitle">Add Medicine Frequency</span></h3><button
+          class="modal-close" onclick="closeModal('modalMedFreq')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body"><input type="hidden" id="medFreqEditId" />
+        <div class="form-row">
+          <div class="form-col-2"><label class="form-label">Medicine Name</label>
+            <div class="autocomplete-wrap"><input type="text" class="form-control" id="medFreqName"
+                placeholder="Type medicine…" autocomplete="off" />
+              <div class="autocomplete-list" id="medFreqNameList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Frequency</label><select class="form-control"
+              id="medFreqFreq">
+              <option value="BD">BD – सुबह -- शाम (Twice a Day)</option>
+              <option value="OD-S">OD – सुबह (Morning)</option>
+              <option value="OD-D">OD – दोपहर (Afternoon)</option>
+              <option value="OD-E">OD – शाम (Evening)</option>
+              <option value="TDS">TDS – तीन बार (Thrice a Day)</option>
+              <option value="HS">HS – रात को सोते समय (At Bedtime)</option>
+              <option value="SOS">SOS – ज़रूरत पड़ने पर (When Required)</option>
+              <option value="STAT">STAT – तुरंत (Immediately)</option>
+              <option value="QID">QID – चार बार (Four Times a Day)</option>
+              <option value="OW">OW – हफ्ते में एक बार (Once a Week)</option>
+              <option value="BW">BW – हफ्ते में दो बार (Twice a Week)</option>
+              <option value="TW">TW – हफ्ते में तीन बार (Thrice a Week)</option>
+              <option value="FD">FD – हफ्ते में पाँच दिन (Five Days a Week)</option>
+            </select></div>
+          <div class="form-col"><label class="form-label">F.Type (Dose)</label><select class="form-control"
+              id="medFreqFType">
+              <option value="">-- Dose --</option>
+              <option value="1-0-1">1-0-1</option>
+              <option value="1-1-1">1-1-1</option>
+              <option value="0-1-0">0-1-0</option>
+              <option value="0-0-1">0-0-1</option>
+              <option value="1-0-0">1-0-0</option>
+              <option value="0-1-1">0-1-1</option>
+              <option value="1-1-0">1-1-0</option>
+              <option value="2-0-2">2-0-2</option>
+              <option value="2-1-2">2-1-2</option>
+              <option value="2-2-2">2-2-2</option>
+              <option value="0-0-2">0-0-2</option>
+              <option value="2-0-0">2-0-0</option>
+              <option value="1-0-2">1-0-2</option>
+              <option value="½-0-½">½-0-½</option>
+              <option value="1-½-1">1-½-1</option>
+              <option value="0-½-0">0-½-0</option>
+              <option value="10ml">10ml</option>
+              <option value="15ml">15ml</option>
+              <option value="5ml">5ml</option>
+              <option value="2drops">2drops</option>
+              <option value="1drop">1drop</option>
+              <option value="1 puff">1 puff</option>
+              <option value="2 puffs">2 puffs</option>
+            </select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Timing (Hindi)</label><select class="form-control"
+              id="medFreqTiming">
+              <option value="">-- Timing --</option>
+              <option value="Khane ke pahle">खाने के पहले</option>
+              <option value="Khane ke baad">खाने के बाद</option>
+              <option value="Subah khali pet">सुबह खाली पेट</option>
+              <option value="Raat ko sone se pahle">रात को सोने से पहले</option>
+              <option value="Subah-Shaam">सुबह-शाम</option>
+              <option value="Teen baar">तीन बार</option>
+              <option value="Zaroorat padne par">ज़रूरत पड़ने पर</option>
+              <option value="Khaana khaane ke saath">खाना खाने के साथ</option>
+            </select></div>
+          <div class="form-col"><label class="form-label">No. Days</label><input type="number" class="form-control"
+              id="medFreqDays" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-col"><label class="form-label">Int.Abt Medicine</label><input type="text"
+              class="form-control" id="medFreqIntAbt" placeholder="Alternative medicine…" /></div>
+          <div class="form-col"><label class="form-label">Advice (Hindi/Instructions)</label><input type="text"
+              class="form-control" id="medFreqAdv" placeholder="e.g. sabero Saama kao" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="saveMedFreq()"><i class="fas fa-save"></i>
+          Save</button></div>
+    </div>
+  </div>
+
+  <!-- Find Old Rx Modal -->
+  <div class="modal-overlay" id="modalFindOldRx">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-search"></i> Find Old Prescription</h3><button class="modal-close"
+          onclick="closeModal('modalFindOldRx')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="search-bar" style="margin-bottom:14px">
+          <div class="search-input-wrap"><i class="fas fa-search"></i><input type="text" id="findOldRxSearch"
+              placeholder="Search by patient name, Rx No…" oninput="renderFindOldRx()" /></div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table" id="findOldRxTable">
+            <thead>
+              <tr>
+                <th>Rx No</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Diagnosis</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View RX Modal -->
+  <div class="modal-overlay" id="modalViewRx">
+    <div class="modal modal-xl">
+      <div class="modal-header">
+        <h3><i class="fas fa-prescription"></i> Prescription Details</h3><button class="modal-close"
+          onclick="closeModal('modalViewRx')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="viewRxContent"></div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="printRxFromView()"><i class="fas fa-print"></i>
+          Print</button></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- PRINT TEMPLATE (hidden) -->
+  <div id="printArea" style="display:none"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
